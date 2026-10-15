@@ -113,6 +113,48 @@ const updateTask = async (req, res) => {
   }
 };
 
+const patchTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+   
+    if (!["pending", "completed"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        msg: "Status must be pending or completed",
+      });
+    }
+
+    const updatedTask = await Task.findByIdAndUpdate(
+      id,
+      { status: status },
+      { returnDocument: "after", runValidators: true },
+    );
+
+   
+    if (!updatedTask) {
+      return res.status(404).json({
+        success: false,
+        msg: "Task not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      msg: "Task updated successfully",
+      data: updatedTask,
+      
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      msg: "Internal server error",
+      err: err.message,
+    });
+  }
+};
+
 const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
