@@ -118,7 +118,6 @@ const patchTask = async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
 
-   
     if (!["pending", "completed"].includes(status)) {
       return res.status(400).json({
         success: false,
@@ -132,7 +131,6 @@ const patchTask = async (req, res) => {
       { returnDocument: "after", runValidators: true },
     );
 
-   
     if (!updatedTask) {
       return res.status(404).json({
         success: false,
@@ -144,7 +142,6 @@ const patchTask = async (req, res) => {
       success: true,
       msg: "Task updated successfully",
       data: updatedTask,
-      
     });
   } catch (err) {
     return res.status(500).json({
@@ -187,4 +184,5 @@ module.exports = {
   getTaskByID,
   updateTask,
   deleteTask,
+  patchTask,
 };
